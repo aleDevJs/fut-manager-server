@@ -5,18 +5,11 @@ import { env } from './env'
 import path from 'path'
 import fastifyJwt from '@fastify/jwt'
 import { InvalidFileError } from './errors/invalid-file-error'
-import cors from '@fastify/cors'
 
 export const app = fastify()
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET
-})
-
-app.register(cors, { 
-  origin: '/*',
-  methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
 })
 
 app.register(appRoutes)
