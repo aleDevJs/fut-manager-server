@@ -14,7 +14,7 @@ app.register(fastifyJwt, {
 })
 
 app.register(cors, { 
-  origin: '*',
+  origin: '/*',
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 })
