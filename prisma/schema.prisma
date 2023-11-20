@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String @id @default(uuid())
+  name          String
+  email         String @unique
+  password_hash String
+  Team          Team[]
+
+  @@map("users")
+}
+
+model Team {
+  id      String    @id @default(uuid())
+  shield  String
+  name    String
+  user_id String
+  user    User      @relation(fields: [user_id], references: [id])
+  players Player[]
+  Match   Match[]
+  Stadium Stadium[]
+  Rival   Rival[]
+
+  @@map("teams")
+}
+
+model Player {
+  id            String   @id @default(uuid())
+  name          String
+  date_of_birth DateTime
+  height        Int
+  weight        Int
+  position      String
+  nationality   String
+  salary        Int
+  isInjured     Boolean
+  image         String
+  team_id       String
+  team          Team     @relation(fields: [team_id], references: [id])
+
+  @@map("players")
+}
+
+model Match {
+  id          String   @id @default(uuid())
+  date        DateTime
+  rival_goals Int      @default(0)
+  team_goals  Int      @default(0)
+  team_id     String
+  rival_id    String
+  stadium_id  String
+  team        Team     @relation(fields: [team_id], references: [id])
+  rival       Rival    @relation(fields: [rival_id], references: [id])
+  stadium     Stadium  @relation(fields: [stadium_id], references: [id])
+
+  @@map("matches")
+}
+
+model Stadium {
+  id      String  @id @default(uuid())
+  name    String
+  team_id String
+  team    Team    @relation(fields: [team_id], references: [id])
+  matches Match[]
+
+  @@map("stadiums")
+}
+
+model Rival {
+  id      String  @id @default(uuid())
+  name    String
+  shield  String
+  team_id String
+  team    Team    @relation(fields: [team_id], references: [id])
+  matches Match[]
+
+  @@map("rivals")
+}
