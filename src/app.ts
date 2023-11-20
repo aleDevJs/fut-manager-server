@@ -5,12 +5,17 @@ import { env } from './env'
 import path from 'path'
 import fastifyJwt from '@fastify/jwt'
 import { InvalidFileError } from './errors/invalid-file-error'
+import fastifyCors from '@fastify/cors'
 
 export const app = fastify()
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET
 })
+
+app.register(fastifyCors, {
+  origin: "http://localhost:3000",
+});
 
 app.register(appRoutes)
 
